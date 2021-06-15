@@ -9,11 +9,12 @@ use serenity::{
 
     framework::standard::{
         StandardFramework,
+        CommandResult,
         macros::hook
     }
 };
 
-use tracing::info;
+use tracing::{info, warn};
 
 use directory::*;
 
@@ -38,12 +39,20 @@ async fn before(ctx: &Context, msg: &Message, command_name: &str) -> bool {
     true
 }
 
+#[hook]
+async fn after(_: &Context, _: &Message, command_name: &str, command_result: CommandResult) {
+    if let Err(e) = command_result {
+        warn!("Failed executing {}: {:?}", command_name, e);
+    }
+}
+
 pub fn build_framework() -> StandardFramework {
     StandardFramework::new()
         .configure(|c| c
                    .with_whitespace(true)
                    .prefix("!")
-                   .delimiters(vec![", ", ","]))
+                   .delimiter(" "))
         .before(before)
+        .after(after)
         .group(&DIRECTORY_GROUP)
 }
