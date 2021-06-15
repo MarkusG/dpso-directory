@@ -8,7 +8,7 @@ use serenity::{
 
 use tracing::{info, error};
 
-use dpso_directory::commands::*;
+use dpso_directory::commands::build_framework;
 
 struct Handler;
 
