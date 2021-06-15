@@ -1,3 +1,5 @@
+mod commands;
+
 use std::{fs, process};
 
 use serenity::{
@@ -7,8 +9,6 @@ use serenity::{
 };
 
 use tracing::{info, error};
-
-use dpso_directory::commands::build_framework;
 
 struct Handler;
 
@@ -38,7 +38,7 @@ async fn main() {
     }
     let token = token.unwrap();
 
-    let framework = build_framework();
+    let framework = commands::build_framework();
 
     let mut client = Client::builder(&token)
         .event_handler(Handler)
